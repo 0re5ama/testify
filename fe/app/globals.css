@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --foreground: black;
+    --background-start: #a4b3b6;
+    --background-end: white;
+    --primary: black;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --foreground: #a4b3b6;
+        --background-start: #2a1b3d;
+        /*--background-end: #44318d;*/
+        --background-end: #332357;
+        --primary: #8265a7;
+    }
+}
+
+body {
+    color: var(--foreground);
+    background: linear-gradient(to bottom, transparent, var(--background-start))
+        var(--background-start);
+}
+
+main {
+    padding: 2em 4em;
+}
+
+input,
+select,
+textarea {
+    background: var(--background-start);
+    border: 1px solid var(--foreground);
+    padding: 0.2em 0.4em;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+}
+
+button {
+    /*background: var(--background-start);*/
+    padding: 0.2em 0.4em;
+    border: 1px solid transparent;
+    color: var(--primary);
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+}
+.col {
+    flex: 1 1 0;
+}
+
+textarea {
+    height: 6em;
+    margin-bottom: 0.5em;
+}
+
+.sub-question {
+    display: flex;
+    gap: 0.5em;
+}
+
+.sub-question textarea {
+    height: 3em;
+}
+
+.diagram {
+    display: flex;
+    gap: 0.5em;
+}
+
+.diagram textarea {
+    height: 8em;
+}
+
+button:hover {
+    border: 1px solid var(--primary);
+    /*background: var(--background-end);*/
+}
+
+section.question-select {
+    display: flex;
+    gap: 3em;
+}
+
+section.question-select section {
+    flex: 1 1 0;
+}
+
+ol.question-list {
+    list-style: decimal;
+}
+
+ol.question-list li {
+    border-bottom: 1px solid #ccc3;
+    padding: 0.25em;
+}
+
+ol.question-list ol,
+ol.subquestion-list {
+    list-style: lower-alpha;
+    padding-left: 2em;
+}
+
+ol.question-list ol li {
+    border-bottom: none;
+}
+
+ol.question-list li span {
+    flex: 1 1 0;
+}
+
+nav ul {
+    display: flex;
+}
+
+nav {
+    margin-bottom: 1em;
+    background-color: #8265a7;
+    padding: 1em;
+    color: var(--background-start);
+    box-shadow: 1px 1px 4px #8265a7;
+}
+
+nav ul li:not(:last-child) {
+    border-right: 1px solid var(--background-start);
+}
+
+nav ul li {
+    padding: 0.2em 0.5em;
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+nav ul li:hover {
+    color: white;
+}

@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Chapter {
+  id        Int        @id @default(autoincrement())
+  name      String     @db.VarChar(150)
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime   @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime?  @map("deleted_at") @db.Timestamptz(6)
+  unitId    Int        @map("unit_id")
+  unit      Unit       @relation(fields: [unitId], references: [id])
+  questions Question[]
+
+  @@map("chapters")
+}
+
+model Question {
+  id           Int                  @id @default(autoincrement())
+  desc         String               @db.VarChar(2000)
+  class        Int
+  type         enum_questions_type?
+  createdAt    DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime             @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime?            @map("deleted_at") @db.Timestamptz(6)
+  chapterId    Int                  @map("chapter_id")
+  chapter      Chapter              @relation(fields: [chapterId], references: [id])
+  subQuestions SubQuestion[]
+  diagrams      Diagram[]
+
+  @@map("questions")
+}
+
+model Diagram {
+  id         Int       @id @default(autoincrement())
+  desc       String    @db.VarChar(5000)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt  DateTime? @map("deleted_at") @db.Timestamptz(6)
+  questionId Int       @map("question_id")
+  question   Question  @relation(fields: [questionId], references: [id])
+
+  @@map("diagrams")
+}
+
+model SubQuestion {
+  id         Int       @id @default(autoincrement())
+  desc       String    @db.VarChar(1500)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt  DateTime? @map("deleted_at") @db.Timestamptz(6)
+  questionId Int       @map("question_id")
+  question   Question  @relation(fields: [questionId], references: [id])
+
+  @@map("sub_questions")
+}
+
+model Subject {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique @db.VarChar(150)
+  shortName String    @unique @map("short_name") @db.VarChar(30)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+  units     Unit[]
+
+  @@map("subjects")
+}
+
+model Unit {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(150)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+  subjectId Int       @map("subject_id")
+  chapters  Chapter[]
+  subject   Subject   @relation(fields: [subjectId], references: [id])
+
+  @@map("units")
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  firstName  String    @db.VarChar(30)
+  middleName String?   @db.VarChar(30)
+  lastName   String    @db.VarChar(30)
+  email      String?   @db.VarChar(50)
+  phone      String    @unique @db.VarChar(50)
+  userName   String    @unique @map("user_name") @db.VarChar(50)
+  password   String    @db.VarChar(255)
+  isAdmin    Boolean
+  status     Boolean
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt  DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  @@map("users")
+}
+
+enum enum_questions_type {
+  vs
+  s
+  l
+  vl
+}
